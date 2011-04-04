@@ -1,6 +1,6 @@
 var game;
 
-var words = new Array('ALBA', 'BRAK', 'CZARA', 'DAMA', 'EWA', 'FAMA', 'GAWRON', 'HANIA', 'IGLO', 'JAN', 'KLASA', 'MATA', 'NIE', 'OBRAZ', 'PLAC', 'RYBA', 'STAN', 'TRYB', 'URAZ', 'WRAK', 'YETI', 'ZNAK');
+var words = new Array('ALBA', 'BRAK', 'CZARA', 'DAMA', 'EWA', 'FAMA', 'GRA', 'HANIA', 'IGLO', 'JAN', 'KLASA', 'MATA', 'NIE', 'OBRAZ', 'PLAC', 'RYBA', 'STAN', 'TRYB', 'URAZ', 'WRAK', 'YETI', 'ZNAK');
 
 var Text = Class.create(
 {
@@ -10,7 +10,7 @@ var Text = Class.create(
 		this.el = new Element('div', {'class':'txt'});
 		this.el.update(this.txt);
 		this.y = 0;
-		this.x = Math.abs(Math.random() * game.board.clientWidth - this.el.clientWidth);
+		this.x = Math.abs(Math.random() * (game.board.clientWidth - this.txt.length*10));
 		
 		this.el.setStyle({position: 'absolute',
 					top: this.y+'px',
@@ -44,23 +44,36 @@ var Game = Class.create(
 	{
 		this.board = $('board');
 		this.status = $('status');
+		this.speed = 8;
 		Event.observe(document, "keydown", this.onKey);
+		$('msg_btn').observe("click", this.new);
 	},
 	
 	new: function()
 	{
 		Text.zidx = 10000000;
-		this.time = 0;
-		this.array = new Array();
-		this.timer = new PeriodicalExecuter(this.onTimer, 0.1);
-		this.input = '';
-		this.status.update(this.input);
+		
+		if(game.array)
+			for(var i = 0; i < game.array.length; i++)
+			{
+				game.array[i].del();
+			}
+		game.array = new Array();
+			
+		game.hideMsg();
+		game.status.update(game.input);
+		
+		game.time = 0;
+		game.wcnt = 0;
+		game.input = '';
+		
+		game.timer = new PeriodicalExecuter(game.onTimer, 1/game.speed);
 	},
 	
 	stop: function()
 	{
 		this.timer.stop();
-		alert('Game over'+"\n"+'Time: '+this.time/10+'s');
+		this.showMsg('Game over!<br><br>Time: '+this.time/this.speed+'s<br>Words: '+this.wcnt);
 	},
 	
 	addObj: function()
@@ -70,6 +83,7 @@ var Game = Class.create(
 	
 	removeObj: function(i)
 	{
+		game.wcnt++;
 		game.array[i].del();
 		game.array.splice(i, 1);
 	},
@@ -106,6 +120,7 @@ var Game = Class.create(
 				{
 					game.removeObj(i--);
 					res = true;
+					break;
 				}
 			game.input = '';
 		}
@@ -115,6 +130,17 @@ var Game = Class.create(
 			game.status.update('---');
 		else
 			game.status.update(game.input);
+	},
+	
+	showMsg: function(msg)
+	{
+		$('msg_txt').update(msg);
+		$('msg').show();
+	},
+	
+	hideMsg: function()
+	{
+		$('msg').hide();
 	}
 });
 
@@ -122,5 +148,4 @@ var Game = Class.create(
 window.onload = function()
 {
 	game = new Game();
-	game.new();
 };

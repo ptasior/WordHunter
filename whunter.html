@@ -14,8 +14,8 @@
 		width: 480px; 
 		height: 610px;
 		overflow: hidden;
-		cursor: none;
-		background-color: navy;
+		background-image: -moz-linear-gradient(bottom center, rgba(0, 0, 10, 1.0) 0%, rgba(0, 0, 200, 1.0) 50%, rgba(50, 50, 250, 1.0) 100%);
+		background-image: -webkit-gradient(linear, center bottom, center top, from(rgba(0, 0, 10, 1.0)), color-stop(50%,rgba(0, 0, 200, 1.0)), to(rgba(50, 50, 250, 1.0)));
 	}
 	#status
 	{
@@ -24,20 +24,46 @@
 		width: 480px; 
 		height: 30px;
 		cursor: none;
+		font-weight: bold;
 		background-color: black;
 		color: white;
+	}
+	#msg
+	{
+		position: relative;
+		top: 200px;
+		width: 200px;
+		margin: 0 auto;
+		padding: 10px;
+		color: black;
+		background-color: white;
+		border: 1px solid black;
+		z-index: 100000000000;
+		opacity: .8;
+		box-shadow: 3px 3px 3px #000;
 	}
 	.txt
 	{
 		color: white;
-		border: dashed 1px white;
+		padding: 4px;
+		padding-right: 6px;
+		background-color: gray;
+		font-weight: bold;
+		border: solid 1px white;
+		border-radius: 10px;
+		text-shadow: 5px 5px 5px #000;
 	}
 	</style>
 	<script src="js/prototype.js" type="text/javascript"></script>	
 	<script src="script.js" type="text/javascript"></script>
 </head>
 <body>
-	<div id="board"></div>
+	<div id="board">
+		<div id="msg">
+			<div id="msg_txt">Start a new game!</div>
+			<button id="msg_btn">Play</button>
+		</div>
+	</div>
 	<div id="status"></div>
 </body>
 </html>
